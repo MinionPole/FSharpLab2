@@ -17,7 +17,8 @@ let ``Contain test`` () =
         |> AVLBag.add 2
         |> AVLBag.add 10
         |> AVLBag.add 5
-        |> AVLBag.tryGet 5 = 1
+        |> AVLBag.tryGet 5 =
+            1
     )
 
 [<Fact>]
@@ -28,5 +29,6 @@ let ``Multiple contain test`` () =
         |> AVLBag.add 2
         |> AVLBag.add 10
         |> AVLBag.add 1
-        |> AVLBag.tryGet 1 = 2
+        |> AVLBag.tryGet 1 =
+            2
     )
