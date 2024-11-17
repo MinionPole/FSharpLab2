@@ -44,11 +44,3 @@ let ``Map Test`` () =
     let mappedTree = (tree |> AVLBag.map (fun x -> x * 2))
     let expectedTree = (data |> Array.map (fun x -> x * 2) |> AVLBag.ofItems)
     Assert.True(mappedTree.Equals(expectedTree))
-
-[<Fact>]
-let ``Map Test`` () =
-    let data = generateRandomArray 100
-    let tree = (data |> AVLBag.ofItems)
-    let mappedTree = (tree |> AVLBag.map (fun x -> x * 2))
-    let expectedTree = (data |> Array.map (fun x -> x * 2) |> AVLBag.ofItems)
-    Assert.True(mappedTree.Equals(expectedTree))
