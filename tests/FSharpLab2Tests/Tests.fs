@@ -1,3 +1,5 @@
+module AVLTest
+
 open System
 open Xunit
 open FsCheck.Xunit
