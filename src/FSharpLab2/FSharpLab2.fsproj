@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Compile Include="avl.fs" />
-    <Compile Include="Program.fs" />
   </ItemGroup>
 
 </Project>
