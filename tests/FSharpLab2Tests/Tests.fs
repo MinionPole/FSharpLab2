@@ -66,3 +66,16 @@ let ``String test`` () =
     let data = generateRandomStringArray 100 6
     let tree = (data |> AVLBag.ofItems)
     Assert.True(tree.Size = data.Length)
+
+[<Fact>]
+let ``Filter+merge test`` () =
+    let data = generateRandomArray 1000
+    let tree = (data |> AVLBag.ofItems)
+    let chet = tree |> AVLBag.filter (fun v -> v % 2 = 0)
+    let nechet = tree |> AVLBag.filter (fun v -> v % 2 = 1)
+    let res1 = (chet |> AVLBag.merge (nechet)).Equals(tree)
+    Assert.True(res1)
+    let greater = tree |> AVLBag.filter (fun v -> v > 50)
+    let less = tree |> AVLBag.filter (fun v -> v <= 50)
+    let res2 = (greater |> AVLBag.merge (less)).Equals(tree)
+    Assert.True(res2)

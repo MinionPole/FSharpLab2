@@ -145,6 +145,7 @@ type AVLBag<'Value when 'Value: comparison> private (root: Vertex<'Value>) =
 
     member _.TryGet = tryGet root
 
+
     member _.Add(v: 'Value) = AVLBag(insert v root)
     member _.Remove(v: 'Value) = AVLBag(remove v root)
 
@@ -181,3 +182,6 @@ module AVLBag =
 
     let merge (lhs: AVLBag<'V>) (rhs: AVLBag<'V>) =
         lhs.TreeSeq |> Seq.fold (fun tree (v) -> tree |> add v) rhs
+
+    let filter pred (tree: AVLBag<'V>) =
+        tree.TreeSeq |> Seq.filter pred |> ofItems
