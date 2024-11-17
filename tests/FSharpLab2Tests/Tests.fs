@@ -50,7 +50,7 @@ let ``Equal+remove Test`` () =
     let data = generateRandomArray 10000
     let tree = (data |> AVLBag.ofItems)
     Assert.True(tree.Equals(tree))
-    Assert.False(mappedTree.Equals(expectedTree.Remove(data[0])))
+    Assert.False(tree.Equals(tree.Remove(data[0])))
 
 let generateRandomString length =
     let random = Random()
@@ -65,4 +65,4 @@ let generateRandomStringArray size stringLength =
 let ``String test`` () =
     let data = generateRandomStringArray 100 6
     let tree = (data |> AVLBag.ofItems)
-    Assert.True(tree.Size() = data.Length)
+    Assert.True(tree.Size = data.Length)
