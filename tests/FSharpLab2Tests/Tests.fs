@@ -56,7 +56,7 @@ let generateRandomString length =
     let random = Random()
     let chars = "abcdefghijklmnopqrstuvwxyz" //
     let charArray = Array.init length (fun _ -> chars.[random.Next(chars.Length)])
-    new string (charArray)
+    string (charArray)
 
 let generateRandomStringArray size stringLength =
     [| for _ in 1..size -> generateRandomString stringLength |] //
