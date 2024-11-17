@@ -135,6 +135,9 @@ let rec private maxDelta node =
     | Node(_, _, v, l, r) -> max (delta node) (max (maxDelta l) (maxDelta r))
     | Nil -> 0
 
+let sumHash (sequence: seq<'T>) : int =
+    sequence |> Seq.fold (fun acc x -> acc + hash x) 0
+
 type AVLBag<'Value when 'Value: comparison> private (root: Vertex<'Value>) =
     public new() = AVLBag(Nil)
 
@@ -152,6 +155,15 @@ type AVLBag<'Value when 'Value: comparison> private (root: Vertex<'Value>) =
 
     member _.MaxDelta = maxDelta root
 
+    override this.Equals(other: obj) =
+        if other :? AVLBag<'Value> then
+            let otherBag = other :?> AVLBag<'Value>
+            let hash1 = sumHash (otherBag.TreeSeq)
+            let hash2 = sumHash (this.TreeSeq)
+            hash1 = hash2
+        else
+            false
+
 module AVLBag =
     [<GeneralizableValue>]
     let empty<'V when 'V: comparison> : AVLBag<'V> = AVLBag<'V>()
@@ -163,3 +175,9 @@ module AVLBag =
     let map f (tree: AVLBag<'V>) = tree.Map f
 
     let tryGet v (tree: AVLBag<'V>) = tree.TryGet v
+
+    let ofItems (items: IEnumerable<'V>) =
+        items |> Seq.fold (fun tree (v) -> tree |> add v) empty
+
+    let merge (lhs: AVLBag<'V>) (rhs: AVLBag<'V>) =
+        lhs.TreeSeq |> Seq.fold (fun tree (v) -> tree |> add v) rhs
