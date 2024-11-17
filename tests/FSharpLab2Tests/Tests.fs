@@ -44,3 +44,25 @@ let ``Map Test`` () =
     let mappedTree = (tree |> AVLBag.map (fun x -> x * 2))
     let expectedTree = (data |> Array.map (fun x -> x * 2) |> AVLBag.ofItems)
     Assert.True(mappedTree.Equals(expectedTree))
+
+[<Fact>]
+let ``Equal+remove Test`` () =
+    let data = generateRandomArray 10000
+    let tree = (data |> AVLBag.ofItems)
+    Assert.True(tree.Equals(tree))
+    Assert.False(mappedTree.Equals(expectedTree.Remove(data[0])))
+
+let generateRandomString length =
+    let random = Random()
+    let chars = "abcdefghijklmnopqrstuvwxyz" //
+    let charArray = Array.init length (fun _ -> chars.[random.Next(chars.Length)])
+    new string (charArray)
+
+let generateRandomStringArray size stringLength =
+    [| for _ in 1..size -> generateRandomString stringLength |] //
+
+[<Fact>]
+let ``String test`` () =
+    let data = generateRandomStringArray 100 6
+    let tree = (data |> AVLBag.ofItems)
+    Assert.True(tree.Size() = data.Length)

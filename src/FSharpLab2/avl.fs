@@ -140,7 +140,7 @@ let sumHash (sequence: seq<'T>) : int =
 
 type AVLBag<'Value when 'Value: comparison> private (root: Vertex<'Value>) =
     public new() = AVLBag(Nil)
-
+    member _.Size = count root
     member _.Height = height root
 
     member _.TryGet = tryGet root
