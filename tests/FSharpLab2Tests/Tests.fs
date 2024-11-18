@@ -79,3 +79,9 @@ let ``Filter+merge test`` () =
     let less = tree |> AVLBag.filter (fun v -> v <= 50)
     let res2 = (greater |> AVLBag.merge (less)).Equals(tree)
     Assert.True(res2)
+
+[<Property>]
+let ``Diff is -1, 0, 1 after creation`` =
+    let data = generateRandomArray 1000
+    let tree = (data |> AVLBag.ofItems)
+    [ -1; 0; 1 ] |> List.contains tree.MaxDelta
