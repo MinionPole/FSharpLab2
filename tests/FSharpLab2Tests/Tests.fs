@@ -85,3 +85,11 @@ let ``Diff is -1, 0, 1 after creation`` =
     let data = generateRandomArray 1000
     let tree = (data |> AVLBag.ofItems)
     [ -1; 0; 1 ] |> List.contains tree.MaxDelta
+
+[<Property>]
+let ``remove property`` =
+    let data = generateRandomArray 1000
+    let tree = (data |> AVLBag.ofItems)
+    let one_remove = (tree |> AVLBag.remove (data[0])).Size <> data.Length
+    let no_remove = ((tree |> AVLBag.remove (102)).Size = tree.Size)
+    no_remove && one_remove
