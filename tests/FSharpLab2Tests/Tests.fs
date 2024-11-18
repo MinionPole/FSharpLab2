@@ -84,12 +84,22 @@ let ``Filter+merge test`` () =
 let ``Diff is -1, 0, 1 after creation`` =
     let data = generateRandomArray 1000
     let tree = (data |> AVLBag.ofItems)
-    [ -1; 0; 1 ] |> List.contains tree.MaxDelta
+    Assert.True([ -1; 0; 1 ] |> List.contains tree.MaxDelta)
 
 [<Property>]
 let ``remove property`` =
     let data = generateRandomArray 1000
     let tree = (data |> AVLBag.ofItems)
 
-    ((tree |> AVLBag.remove (data[0])).Size <> data.Length)
-    && ((tree |> AVLBag.remove (102)).Size = tree.Size)
+    Assert.True(
+        ((tree |> AVLBag.remove (data[0])).Size <> data.Length)
+        && ((tree |> AVLBag.remove (102)).Size = tree.Size)
+    )
+
+
+[<Property>]
+let ``neutral mono`` (l: int list) =
+    let data = generateRandomArray 1000
+    let tree = (data |> AVLBag.ofItems)
+    Assert.True((tree.Equals(AVLTree.merge tree AVLTree.empty)))
+    Assert.True((tree.Equals(AVLTree.merge AVLTree.empty tree)))
