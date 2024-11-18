@@ -101,5 +101,5 @@ let ``remove property`` =
 let ``neutral mono`` (l: int list) =
     let data = generateRandomArray 1000
     let tree = (data |> AVLBag.ofItems)
-    Assert.True((tree.Equals(AVLTree.merge tree AVLTree.empty)))
-    Assert.True((tree.Equals(AVLTree.merge AVLTree.empty tree)))
+    Assert.True((tree.Equals(AVLBag.merge tree AVLBag.empty)))
+    Assert.True((tree.Equals(AVLBag.merge AVLBag.empty tree)))
