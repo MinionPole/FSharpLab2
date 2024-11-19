@@ -33,13 +33,22 @@ let ``Multiple contain test`` () =
             2
     )
 
-let generateRandomArray (size: int) =
-    let random = Random()
-    [| for _ in 1..size -> random.Next(1, 101) |]
+let createArray size =
+    let arr = Array.zeroCreate size
+
+    for i in 0 .. size - 1 do
+        if i % 5 = 1 && i > 0 then
+            arr.[i] <- arr.[i - 1]
+        else
+            arr.[i] <- i
+
+    arr
+
+let func_data = createArray 1000
 
 [<Fact>]
 let ``Map Test`` () =
-    let data = generateRandomArray 100
+    let data = func_data
     let tree = (data |> AVLBag.ofItems)
     let mappedTree = (tree |> AVLBag.map (fun x -> x * 2))
     let expectedTree = (data |> Array.map (fun x -> x * 2) |> AVLBag.ofItems)
@@ -47,29 +56,14 @@ let ``Map Test`` () =
 
 [<Fact>]
 let ``Equal+remove Test`` () =
-    let data = generateRandomArray 10000
+    let data = func_data
     let tree = (data |> AVLBag.ofItems)
     Assert.True(tree.Equals(tree))
     Assert.False(tree.Equals(tree.Remove(data[0])))
 
-let generateRandomString length =
-    let random = Random()
-    let chars = "abcdefghijklmnopqrstuvwxyz" //
-    let charArray = Array.init length (fun _ -> chars.[random.Next(chars.Length)])
-    string (charArray)
-
-let generateRandomStringArray size stringLength =
-    [| for _ in 1..size -> generateRandomString stringLength |] //
-
-[<Fact>]
-let ``String test`` () =
-    let data = generateRandomStringArray 100 6
-    let tree = (data |> AVLBag.ofItems)
-    Assert.True(tree.Size = data.Length)
-
 [<Fact>]
 let ``Filter+merge test`` () =
-    let data = generateRandomArray 1000
+    let data = func_data
     let tree = (data |> AVLBag.ofItems)
     let chet = tree |> AVLBag.filter (fun v -> v % 2 = 0)
     let nechet = tree |> AVLBag.filter (fun v -> v % 2 = 1)
@@ -79,6 +73,25 @@ let ``Filter+merge test`` () =
     let less = tree |> AVLBag.filter (fun v -> v <= 50)
     let res2 = (greater |> AVLBag.merge (less)).Equals(tree)
     Assert.True(res2)
+
+let generateRandomString length =
+    let random = Random()
+    let chars = "abcdefghijklmnopqrstuvwxyz"
+    let charArray = Array.init length (fun _ -> chars.[random.Next(chars.Length)])
+    string (charArray)
+
+let generateRandomStringArray size stringLength =
+    [| for _ in 1..size -> generateRandomString stringLength |]
+
+let generateRandomArray (size: int) =
+    let random = Random()
+    [| for _ in 1..size -> random.Next(1, 101) |]
+
+[<Property>]
+let ``String test`` () =
+    let data = generateRandomStringArray 100 6
+    let tree = (data |> AVLBag.ofItems)
+    Assert.True(tree.Size = data.Length)
 
 [<Property>]
 let ``Diff is -1, 0, 1 after creation`` =
@@ -95,7 +108,6 @@ let ``remove property`` =
         ((tree |> AVLBag.remove (data[0])).Size <> data.Length)
         && ((tree |> AVLBag.remove (102)).Size = tree.Size)
     )
-
 
 [<Property>]
 let ``neutral mono`` (l: int list) =
