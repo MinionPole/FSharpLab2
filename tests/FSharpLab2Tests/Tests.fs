@@ -44,11 +44,11 @@ let createArray size =
 
     arr
 
-let func_data = createArray 1000
+let funcData = createArray 1000
 
 [<Fact>]
 let ``Map Test`` () =
-    let data = func_data
+    let data = funcData
     let tree = (data |> AVLBag.ofItems)
     let mappedTree = (tree |> AVLBag.map (fun x -> x * 2))
     let expectedTree = (data |> Array.map (fun x -> x * 2) |> AVLBag.ofItems)
@@ -56,14 +56,14 @@ let ``Map Test`` () =
 
 [<Fact>]
 let ``Equal+remove Test`` () =
-    let data = func_data
+    let data = funcData
     let tree = (data |> AVLBag.ofItems)
     Assert.True(tree.Equals(tree))
     Assert.False(tree.Equals(tree.Remove(data[0])))
 
 [<Fact>]
 let ``Filter+merge test`` () =
-    let data = func_data
+    let data = funcData
     let tree = (data |> AVLBag.ofItems)
     let chet = tree |> AVLBag.filter (fun v -> v % 2 = 0)
     let nechet = tree |> AVLBag.filter (fun v -> v % 2 = 1)
