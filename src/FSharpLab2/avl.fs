@@ -129,7 +129,7 @@ let rec private map node f =
     | Node(_, _, v, l, r) -> createVertex (f v) (map l f) (map r f)
     | Nil -> Nil
 
-// для проверки факта, что дерево действительно сбалансированное
+// для проверки факта в тестах, что дерево действительно сбалансированное
 let rec private maxDelta node =
     match node with
     | Node(_, _, v, l, r) -> max (delta node) (max (maxDelta l) (maxDelta r))
