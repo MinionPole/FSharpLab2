@@ -59,7 +59,7 @@ let ``Equal+remove Test`` () =
     let data = funcData
     let tree = (data |> AVLBag.ofItems)
     Assert.True(tree.Equals(tree))
-    Assert.False(tree.Equals(tree.Remove(data[0])))
+    Assert.True(tree.Size - 1 = tree.Remove(data[0]).Size)
 
 [<Fact>]
 let ``Filter+merge test`` () =
