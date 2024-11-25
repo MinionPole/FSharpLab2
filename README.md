@@ -281,34 +281,33 @@ let ``Filter+merge test`` () =
 ```
 
 В тестировании свойств, генерировался рандомный массив, либо из строк, либо из чисел.
+
 ```f#
+[<Property>]
+let ``String test`` (l: string list) =
+    let tree = (l |> AVLBag.ofItems)
+    Assert.True(tree.Size = l.Length)
 
 [<Property>]
-let ``String test`` () =
-    let data = generateRandomStringArray 100 6
-    let tree = (data |> AVLBag.ofItems)
-    Assert.True(tree.Size = data.Length)
-
-[<Property>]
-let ``Diff is -1, 0, 1 after creation`` =
-    let data = generateRandomArray 1000
-    let tree = (data |> AVLBag.ofItems)
+let ``Diff is -1, 0, 1 after creation`` (l: int list) =
+    let tree = (l |> AVLBag.ofItems)
     Assert.True([ -1; 0; 1 ] |> List.contains tree.MaxDelta)
 
 [<Property>]
-let ``remove property`` =
-    let data = generateRandomArray 1000
-    let tree = (data |> AVLBag.ofItems)
-
-    Assert.True(
-        ((tree |> AVLBag.remove (data[0])).Size <> data.Length)
-        && ((tree |> AVLBag.remove (102)).Size = tree.Size)
-    )
-
-[<Property>]
 let ``neutral mono`` (l: int list) =
-    let data = generateRandomArray 1000
-    let tree = (data |> AVLBag.ofItems)
+    let tree = (l |> AVLBag.ofItems)
     Assert.True((tree.Equals(AVLBag.merge tree AVLBag.empty)))
     Assert.True((tree.Equals(AVLBag.merge AVLBag.empty tree)))
+
+[<Property>]
+let ``Monoid associative`` (a: int list) (b: int list) (c: int list) =
+    let aTree = a |> AVLBag.ofItems
+    let bTree = b |> AVLBag.ofItems
+    let cTree = c |> AVLBag.ofItems
+
+    let lhs = AVLBag.merge aTree (AVLBag.merge bTree cTree)
+    let rhs = AVLBag.merge (AVLBag.merge aTree bTree) cTree
+
+    Assert.True((lhs = rhs))
+
 ```
