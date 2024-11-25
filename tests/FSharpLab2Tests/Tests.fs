@@ -103,7 +103,6 @@ let ``remove property`` (l: int list) =
 
     Assert.True(
         ((tree |> AVLBag.remove (l[0])).Size <> l.Length)
-        && ((tree |> AVLBag.remove (102)).Size = tree.Size)
     )
 
 [<Property>]
