@@ -138,11 +138,6 @@ let rec private maxDelta node =
 let sumHash (sequence: seq<'T>) : int =
     sequence |> Seq.fold (fun acc x -> acc + hash x) 0
 
-let allPairs seq1 seq2 =
-    seq1 |> Seq.collect (fun item1 -> 
-        seq2 |> Seq.map (fun item2 -> (item1, item2))
-    )
-
 type AVLBag<'Value when 'Value: comparison> private (root: Vertex<'Value>) =
     public new() = AVLBag(Nil)
     member _.Size = count root
@@ -161,18 +156,19 @@ type AVLBag<'Value when 'Value: comparison> private (root: Vertex<'Value>) =
     member _.MaxDelta = maxDelta root
 
     override this.Equals(other: obj) =
-    if other :? AVLBag<'Value> then
-        let otherBag = other :?> AVLBag<'Value>
-        let thisElements = this.TreeSeq
-        let otherElements = otherBag.TreeSeq
-        if(Seq.length thisElements = Seq.length otherElements) then
-          Seq.zip thisElements otherElements
-            |> Seq.map (fun (v1, v2) -> v1 = v2)
-            |> Seq.fold (&&) true
+        if other :? AVLBag<'Value> then
+            let otherBag = other :?> AVLBag<'Value>
+            let thisElements = this.TreeSeq
+            let otherElements = otherBag.TreeSeq
+
+            if (Seq.length thisElements = Seq.length otherElements) then
+                Seq.zip thisElements otherElements
+                |> Seq.map (fun (v1, v2) -> v1 = v2)
+                |> Seq.fold (&&) true
+            else
+                false
         else
-          false
-    else
-        raise (System.Exception("The compared object is not an AVLBag.")) 
+            raise (System.Exception("The compared object is not an AVLBag."))
 
 module AVLBag =
     [<GeneralizableValue>]
