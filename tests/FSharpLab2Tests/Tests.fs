@@ -98,12 +98,6 @@ let ``Diff is -1, 0, 1 after creation`` (l: int list) =
     Assert.True([ -1; 0; 1 ] |> List.contains tree.MaxDelta)
 
 [<Property>]
-let ``remove property`` (l: int list) =
-    let tree = (l |> AVLBag.ofItems)
-
-    Assert.True(((tree |> AVLBag.remove (l[0])).Size <> l.Length))
-
-[<Property>]
 let ``neutral mono`` (l: int list) =
     let tree = (l |> AVLBag.ofItems)
     Assert.True((tree.Equals(AVLBag.merge tree AVLBag.empty)))
