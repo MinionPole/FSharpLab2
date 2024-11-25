@@ -138,6 +138,11 @@ let rec private maxDelta node =
 let sumHash (sequence: seq<'T>) : int =
     sequence |> Seq.fold (fun acc x -> acc + hash x) 0
 
+let allPairs seq1 seq2 =
+    seq1 |> Seq.collect (fun item1 -> 
+        seq2 |> Seq.map (fun item2 -> (item1, item2))
+    )
+
 type AVLBag<'Value when 'Value: comparison> private (root: Vertex<'Value>) =
     public new() = AVLBag(Nil)
     member _.Size = count root
@@ -158,18 +163,14 @@ type AVLBag<'Value when 'Value: comparison> private (root: Vertex<'Value>) =
     override this.Equals(other: obj) =
     if other :? AVLBag<'Value> then
         let otherBag = other :?> AVLBag<'Value>
-        let thisElements = Seq.toList this.TreeSeq
-        let otherElements = Seq.toList otherBag.TreeSeq
-        
-        if thisElements.Length <> otherElements.Length then
-            raise (System.Exception("The bags have different lengths.")) // Выбрасываем исключение при различной длине
-
-        // Сравниваем элементы
-        for i in 0 .. thisElements.Length - 1 do
-            if thisElements.[i] <> otherElements.[i] then
-                raise (System.Exception($"Elements at index {i} are not equal: {thisElements.[i]} <> {otherElements.[i]}"))
-
-        true // Если все элементы равны, возвращаем true
+        let thisElements = this.TreeSeq
+        let otherElements = otherBag.TreeSeq
+        if(Seq.length thisElements = Seq.length otherElements) then
+          Seq.zip thisElements otherElements
+            |> Seq.map (fun (v1, v2) -> v1 = v2)
+            |> Seq.fold (&&) true
+        else
+          false
     else
         raise (System.Exception("The compared object is not an AVLBag.")) 
 
