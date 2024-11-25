@@ -104,12 +104,6 @@ let ``neutral mono`` (l: int list) =
     Assert.True((tree.Equals(AVLBag.merge AVLBag.empty tree)))
 
 [<Property>]
-let ``neutral mono`` (l: int list) =
-    let tree = (l |> AVLBag.ofItems)
-    Assert.True((tree.Equals(AVLBag.merge tree AVLBag.empty)))
-    Assert.True((tree.Equals(AVLBag.merge AVLBag.empty tree)))
-
-[<Property>]
 let ``Monoid associative`` (a: int list) (b: int list) (c: int list) =
     let aTree = a |> AVLBag.ofItems
     let bTree = b |> AVLBag.ofItems
