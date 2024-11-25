@@ -90,7 +90,7 @@ let generateRandomArray (size: int) =
 [<Property>]
 let ``String test`` (l: string list) =
     let tree = (l |> AVLBag.ofItems)
-    Assert.True(tree.Size = data.Length)
+    Assert.True(tree.Size = l.Length)
 
 [<Property>]
 let ``Diff is -1, 0, 1 after creation`` (l: int list) =
@@ -102,7 +102,7 @@ let ``remove property`` (l: int list) =
     let tree = (l |> AVLBag.ofItems)
 
     Assert.True(
-        ((tree |> AVLBag.remove (data[0])).Size <> data.Length)
+        ((tree |> AVLBag.remove (l[0])).Size <> l.Length)
         && ((tree |> AVLBag.remove (102)).Size = tree.Size)
     )
 
