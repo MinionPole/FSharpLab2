@@ -88,21 +88,18 @@ let generateRandomArray (size: int) =
     [| for _ in 1..size -> random.Next(1, 101) |]
 
 [<Property>]
-let ``String test`` () =
-    let data = generateRandomStringArray 100 6
-    let tree = (data |> AVLBag.ofItems)
+let ``String test`` (l: string list) =
+    let tree = (l |> AVLBag.ofItems)
     Assert.True(tree.Size = data.Length)
 
 [<Property>]
-let ``Diff is -1, 0, 1 after creation`` =
-    let data = generateRandomArray 1000
-    let tree = (data |> AVLBag.ofItems)
+let ``Diff is -1, 0, 1 after creation`` (l: int list) =
+    let tree = (l |> AVLBag.ofItems)
     Assert.True([ -1; 0; 1 ] |> List.contains tree.MaxDelta)
 
 [<Property>]
-let ``remove property`` =
-    let data = generateRandomArray 1000
-    let tree = (data |> AVLBag.ofItems)
+let ``remove property`` (l: int list) =
+    let tree = (l |> AVLBag.ofItems)
 
     Assert.True(
         ((tree |> AVLBag.remove (data[0])).Size <> data.Length)
@@ -111,7 +108,6 @@ let ``remove property`` =
 
 [<Property>]
 let ``neutral mono`` (l: int list) =
-    let data = generateRandomArray 1000
-    let tree = (data |> AVLBag.ofItems)
+    let tree = (l |> AVLBag.ofItems)
     Assert.True((tree.Equals(AVLBag.merge tree AVLBag.empty)))
     Assert.True((tree.Equals(AVLBag.merge AVLBag.empty tree)))

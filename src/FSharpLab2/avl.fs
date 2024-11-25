@@ -144,8 +144,7 @@ type AVLBag<'Value when 'Value: comparison> private (root: Vertex<'Value>) =
     member _.Height = height root
 
     member _.TryGet = tryGet root
-
-
+    
     member _.Add(v: 'Value) = AVLBag(insert v root)
     member _.Remove(v: 'Value) = AVLBag(remove v root)
 
